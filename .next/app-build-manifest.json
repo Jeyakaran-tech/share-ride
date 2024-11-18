@@ -11,10 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/forms/form-layout/page": [
+    "/publish/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/forms/form-layout/page.js"
+      "static/chunks/app/publish/page.js"
     ]
   }
 }
