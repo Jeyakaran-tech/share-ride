@@ -1,9 +1,11 @@
 "use client";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import React from "react";
 
 export default function PublishPage() {
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
+    <DefaultLayout>
+    <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-8">
         <h1 className="text-xl sm:text-2xl font-bold mb-6">Publish a Ride</h1>
 
@@ -92,5 +94,6 @@ export default function PublishPage() {
         </div>
       </div>
     </div>
+    </DefaultLayout>
   );
 }
