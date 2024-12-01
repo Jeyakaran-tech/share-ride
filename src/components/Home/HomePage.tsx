@@ -34,9 +34,6 @@ export default function HomePage({
           </div>
         </section>
       </main>
-      <footer className="bg-customYellow text-center py-4">
-          <p className="text-gray-600">&copy; {new Date().getFullYear()} Share ride. All rights reserved.</p>
-        </footer>
     </div>
   );
 }

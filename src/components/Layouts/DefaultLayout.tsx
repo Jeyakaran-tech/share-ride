@@ -11,7 +11,7 @@ export default function DefaultLayout({
     <>
     <div className="min-h-screen flex flex-col bg-primary">
       {/* Main content aligned to the left */}
-      <div className="flex-grow">
+      <div className="flex-grow flex justify-center items-center">
       {children}
       </div>
       <footer className="bg-customYellow text-center py-4">

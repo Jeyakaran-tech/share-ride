@@ -1,19 +1,50 @@
 "use client";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import React from "react";
+import React, { useState } from "react";
+import { LoadScript, Autocomplete } from "@react-google-maps/api";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 export default function PublishPage() {
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [numPassengers, setNumOfPassengers] = useState(0);
+  const [fromAutocomplete, setFromAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [toAutocomplete, setToAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const router = useRouter(); // Initialize useRouter
+
+  // Handle "From" location selection
+  const handleFromPlaceSelect = () => {
+    const place = fromAutocomplete?.getPlace();
+    if (place) {
+      setFrom(place.formatted_address || "");
+    }
+  };
+
+  // Handle "To" location selection
+  const handleToPlaceSelect = () => {
+    const place = toAutocomplete?.getPlace();
+    if (place) {
+      setTo(place.formatted_address || "");
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Redirect to login page
+    router.push("/auth/signin");
+  };
+
   return (
     <DefaultLayout>
     <div className="min-h-screen p-4 sm:p-6">
-      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-8">
-        <h1 className="text-xl sm:text-2xl font-bold mb-6">Publish a Ride</h1>
+      <div className="max-w-8xl mx-auto bg-customYellow rounded-lg shadow-lg p-4 sm:p-8">
+        <h1 className="text-black text-xl sm:text-2xl font-bold mb-6">Publish a Ride</h1>
 
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* First Column: Form */}
           <div className="p-4 border rounded-lg shadow-md bg-gray-50">
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               {/* From Location */}
               <div>
                 <label
@@ -22,12 +53,26 @@ export default function PublishPage() {
                 >
                   From
                 </label>
-                <input
-                  id="from"
-                  type="text"
-                  placeholder="Melbourne, Victoria, Australia"
-                  className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-400 focus:outline-none"
-                />
+                <LoadScript
+                    googleMapsApiKey={
+                      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
+                    }
+                    libraries={["places"]}
+                  >
+                    <Autocomplete
+                      onLoad={(auto) => setFromAutocomplete(auto)}
+                      onPlaceChanged={handleFromPlaceSelect}
+                    >
+                      <input
+                        id="from"
+                        type="text"
+                        value={from}
+                        onChange={(e) => setFrom(e.target.value)}
+                        placeholder="Melbourne, Victoria, Australia"
+                        className="input-field"
+                      />
+                    </Autocomplete>
+                  </LoadScript>
               </div>
 
               {/* To Location */}
@@ -38,34 +83,42 @@ export default function PublishPage() {
                 >
                   To
                 </label>
-                <input
-                  id="to"
-                  type="text"
-                  placeholder="Sydney, New South Wales, Australia"
-                  className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-400 focus:outline-none"
-                />
+
+                <LoadScript
+                    googleMapsApiKey={
+                      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
+                    }
+                    libraries={["places"]}
+                  >
+                    <Autocomplete
+                      onLoad={(auto) => setToAutocomplete(auto)}
+                      onPlaceChanged={handleToPlaceSelect}
+                    >
+                      <input
+                        id="to"
+                        type="text"
+                        value={to}
+                        onChange={(e) => setTo(e.target.value)}
+                        placeholder="Sydney, New South Wales, Australia"
+                        className="input-field"
+                      />
+                    </Autocomplete>
+                  </LoadScript>
+               
               </div>
 
               {/* Passengers */}
               <div className="flex items-center space-x-4">
                 <label className="text-gray-600 font-medium">Passengers</label>
-                <button
-                  type="button"
-                  className="w-8 h-8 flex items-center justify-center border rounded-lg hover:bg-gray-200"
-                >
-                  -
-                </button>
+        
                 <input
                   type="number"
                   defaultValue={2}
-                  className="w-12 text-center border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+                  value={numPassengers}
+                  onChange={(e) => setNumOfPassengers(e.target.valueAsNumber)}
+                  className=" text-black w-12 text-center border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
                 />
-                <button
-                  type="button"
-                  className="w-8 h-8 flex items-center justify-center border rounded-lg hover:bg-gray-200"
-                >
-                  +
-                </button>
+                
               </div>
 
               {/* Submit Button */}
@@ -82,7 +135,7 @@ export default function PublishPage() {
 
           {/* Second Column: Placeholder */}
           <div className="p-4 border rounded-lg shadow-md bg-gray-50">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">
+            <h2 className="text-black text-lg sm:text-xl font-semibold mb-4">
               Additional Information
             </h2>
             <p className="text-gray-600">
